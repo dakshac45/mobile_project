@@ -2,18 +2,16 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-//import 'package:flutter_project/controller/auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_editor_plus/image_editor_plus.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:uuid/uuid.dart';
 import 'package:path_provider/path_provider.dart';
 
 class CameraPage extends StatefulWidget {
   const CameraPage({Key? key}) : super(key: key);
-
-  // final String title;
 
   @override
   State<CameraPage> createState() => _CameraPageState();
@@ -46,17 +44,27 @@ class _CameraPageState extends State<CameraPage> {
             child: Text('Use Camera'),
           ),
           SizedBox(height: 16.0),
-          TextButton(
-            onPressed: _upload,
-            child: Text('Save'),
-          ),
+          _image == null
+              ? SizedBox(height: 0.0)
+              : TextButton(
+                  onPressed: _upload,
+                  child: Text('Save'),
+                ),
           SizedBox(height: 16.0),
-          TextButton(
-            onPressed: _editImage,
-            child: Text('Edit Image'),
-          ),
+          _image == null
+              ? SizedBox(height: 0.0)
+              : TextButton(
+                  onPressed: _shareImage,
+                  child: Text('Share'),
+                ),
+          SizedBox(height: 16.0),
+          _image == null
+              ? SizedBox(height: 0.0)
+              : TextButton(
+                  onPressed: _editImage,
+                  child: Text('Edit Image'),
+                ),
         ]
-
             //children: getBody(),
             ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
@@ -95,6 +103,19 @@ class _CameraPageState extends State<CameraPage> {
     Navigator.pop(context);
   }
 
+  void _shareImage() async {
+    if (_image == null) {
+      return;
+    }
+
+    final tempDir = await getTemporaryDirectory();
+    File file = await File('${tempDir.path}/image.png').create();
+    file.writeAsBytesSync(await _image!.readAsBytes());
+
+    // Share file using Share plugin
+    await Share.shareFiles([file.path]);
+  }
+
   void _editImage() async {
     final currentImageBytes = await _image!.readAsBytes();
     final editedImage = await Navigator.push(
@@ -111,9 +132,7 @@ class _CameraPageState extends State<CameraPage> {
     final tempDir = await getTemporaryDirectory();
     File file = await File('${tempDir.path}/image.png').create();
     file.writeAsBytesSync(imageInUnit8List);
-    // File file = File.fromRawPath(editedImage);
 
-// file.writeAsBytesSync(imageInUnit8List);
     setState(() {
       _image = file;
     });
@@ -121,7 +140,6 @@ class _CameraPageState extends State<CameraPage> {
 
   Future<String> uploadFile(String filename) async {
     // Create a Reference to the file
-    print("here" + filename);
     Reference ref = FirebaseStorage.instance.ref().child('$filename.jpg');
     final SettableMetadata metadata =
         SettableMetadata(contentType: 'image/jpeg', contentLanguage: 'en');
@@ -142,16 +160,10 @@ class _CameraPageState extends State<CameraPage> {
   Future<void> _addItem(String downloadURL, String uid) async {
     await FirebaseFirestore.instance.collection('photos').add({
       'downloadURL': downloadURL,
-      //'geopoint': GeoPoint(_position!.latitude, _position!.longitude),
       'imageId': uid,
       'userId': FirebaseAuth.instance.currentUser!.uid,
     });
   }
-
-  /// Determine the current position of the device.
-  ///
-  /// When the location services are not enabled or permissions
-  /// are denied the `Future` will return an error.
 
   Widget getBody() {
     return Container(
@@ -160,9 +172,8 @@ class _CameraPageState extends State<CameraPage> {
         height: 200,
         color: Colors.white,
         child: _image == null
-            ? Placeholder(
-                child: Image.network(
-                    "https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg"))
+            ? Image.network(
+                "https://cdn.dribbble.com/users/55871/screenshots/2158022/media/95f08ed3812af28b93fa534fb5d277b3.jpg")
             : Image.file(_image!));
   }
 }

@@ -52,6 +52,26 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Text(
+                  'Welcome to',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.purple,
+                    fontFamily: 'Arial',
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Photomaster',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.purple, // set the color to purple
+                    fontFamily:
+                        'Arial', // set the font family to Arial or any other desired font
+                  ),
+                ),
+                SizedBox(height: 20),
                 TextFormField(
                   decoration: InputDecoration(
                     labelText: 'Email',
@@ -59,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter your email address';
+                      return 'Please enter email address';
                     }
                     if (!value.contains('@')) {
                       return 'Please enter a valid email address';
@@ -99,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     Get.to(SignUpScreen());
                   },
-                  child: Text('Don\'t have an account? Sign up'),
+                  child: Text('Don\'t have an account? Register Here'),
                 ),
               ],
             ),

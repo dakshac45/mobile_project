@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/controller/auth.dart';
-import 'package:flutter_project/main.dart';
 import 'package:flutter_project/view/camera.dart';
 import 'package:flutter_project/view/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -20,20 +17,6 @@ class HomeScreen extends StatelessWidget {
   void _signout() async {
     AuthHelper().signOut();
     Get.offAll(LoginPage());
-  }
-
-  late List<String> _currentUserImages;
-
-  getImages() async {
-    var myPhotos = await FirebaseFirestore.instance
-        .collection('photos')
-        .where('userId', isEqualTo: AuthHelper().getUser()!.uid)
-        .get();
-
-    for (int i = 0; i < myPhotos.docs.length; i++) {
-      _currentUserImages
-          .add((myPhotos.docs[i].data() as dynamic)['downloadURL']);
-    }
   }
 
   @override
@@ -105,15 +88,6 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   );
-
-                  // return ListTile(
-                  //   leading: Container(
-                  //     height: 100,
-                  //     width: 100,
-                  //     child: thisItem.containsKey('downloadURL') ? Image.network(
-                  //         '${thisItem['downloadURL']}') : Container(),
-                  //   ),
-                  // );
                 });
           }
 

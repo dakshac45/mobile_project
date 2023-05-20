@@ -26,10 +26,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _isLoading = true;
       });
 
-      // print("Email " + email!);
-      // qwerty1234
-      // print("Password " + password!);
-
       AuthHelper()
           .signUp(emailAddress: email!, password: password!)
           .then((result) {
@@ -59,6 +55,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Text(
+                  'Welcome to',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.purple,
+                    fontFamily: 'Arial',),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Photomaster',
+                  style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.purple, // set the color to purple
+                  fontFamily: 'Arial', // set the font family to Arial or any other desired font
+                  ),
+                  ),
                 TextFormField(
                   decoration: InputDecoration(
                     labelText: 'Email',
@@ -86,10 +99,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter a password';
+                      return 'Password field is empty';
                     }
-                    if (value.length < 6) {
-                      return 'Password must be at least 6 characters long';
+                    if (value.length < 8) {
+                      return 'Password must be at least 8 characters long';
                     }
                     return null;
                   },

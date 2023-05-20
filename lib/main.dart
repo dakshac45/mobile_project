@@ -4,8 +4,6 @@ import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project/controller/auth.dart';
 import 'package:flutter_project/view/login.dart';
-import 'package:flutter_project/view/signup.dart';
-import 'package:flutter_project/view/camera.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get.dart';
 
@@ -15,7 +13,6 @@ Future<void> main() async {
   options: DefaultFirebaseOptions.currentPlatform,
 );
   runApp(const MyApp());
-  
 }
 
 class MyApp extends StatelessWidget {
@@ -26,11 +23,12 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.purple, // sets the default primary color to purple
+        accentColor: Colors.purpleAccent,
       ),
       home: Scaffold(
         body: AuthHelper().getUser() != null
-            ? const HomeScreen()
+            ? HomeScreen()
             : const LoginPage(),
       ),
     );
