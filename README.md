@@ -1,6 +1,16 @@
 # mobile_project
 A new Flutter project.
 
+#References:
+https://pub.dev/
+https://flutter.dev/
+https://firebase.google.com/
+https://www.youtube.com/watch?v=BBccK1zTgxw
+https://www.youtube.com/watch?v=vzg6iNziiKw
+https://www.youtube.com/watch?v=4E4V9F3cbp4
+https://www.youtube.com/watch?v=FslszEO3NvM
+
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
